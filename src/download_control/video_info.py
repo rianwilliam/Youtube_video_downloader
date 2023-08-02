@@ -1,5 +1,6 @@
 """Here the download information is entered."""
 import os
+from tkinter import Tk, filedialog
 from .video import download_video
 from .playlist import download_playlist
 from src.screens.user_screens import options, colors
@@ -14,14 +15,21 @@ def get_url() -> str:
 
 def get_path() -> str:
     """Gets the directory where the file will be saved"""
-    path = ""
-    while not os.path.exists(path):
-        path = input(
-            "Insira o diretório de download (deixar em branco para diretório atual): "
+    path_video = ""
+    while not path_video:
+        selected_option = options(
+            "Selecione o Diretório de download",
+            ["Personalizado","Atual"]
         )
-        if not path:
-            path = os.getcwd()
-    return path
+        if selected_option == "Personalizado":
+            root = Tk()
+            root.withdraw()
+            path_video = filedialog.askdirectory()
+            root.destroy()
+        elif selected_option == "Atual":
+            path_video = os.getcwd()
+
+    return path_video
 
 def get_video_format() -> str:
     """Gets what format the file will be downloaded in"""
